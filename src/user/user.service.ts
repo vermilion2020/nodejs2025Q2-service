@@ -1,11 +1,21 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { users } from '../db/db';
 import { randomUUID } from 'node:crypto';
+import { User } from './entities/user.entity';
 
 @Injectable()
-export class UsersService {
+export class UserService {
+  removePassword(user: User) {
+    const { id, login, createdAt, updatedAt, version } = user;
+    return { id, login, createdAt, updatedAt, version };
+  }
+
   create(createUserDto: CreateUserDto) {
     const user = {
       id: randomUUID(),
@@ -15,12 +25,11 @@ export class UsersService {
       ...createUserDto,
     };
     users.set(user.id, user);
-    return user;
+    return this.removePassword(user);
   }
 
   findAll() {
-    console.log(users);
-    return Array.from(users.values());
+    return Array.from(users.values()).map((user) => this.removePassword(user));
   }
 
   findOne(id: string) {
@@ -28,7 +37,7 @@ export class UsersService {
     if (!user) {
       throw new NotFoundException('User not found');
     }
-    return user;
+    return this.removePassword(user);
   }
 
   update(id: string, updateUserDto: UpdateUserDto) {
@@ -36,8 +45,16 @@ export class UsersService {
     if (!user) {
       throw new NotFoundException('User not found');
     }
-    users.set(id, { ...user, ...updateUserDto });
-    return users.get(id);
+    if (updateUserDto.oldPassword !== user.password) {
+      throw new ForbiddenException('Old password is incorrect');
+    }
+    users.set(id, {
+      ...user,
+      version: user.version + 1,
+      updatedAt: Date.now(),
+      password: updateUserDto.newPassword,
+    });
+    return this.removePassword(users.get(id));
   }
 
   remove(id: string) {
