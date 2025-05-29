@@ -50,11 +50,10 @@ export class TrackService {
   }
 
   remove(id: string) {
-    console.log(tracks);
     if (!tracks.has(id)) {
       throw new NotFoundException(`Track with id "${id}" not found`);
     }
-    this.favsService.removeTrack(id);
+    this.favsService.removeTrack(id, true);
     tracks.delete(id);
     return true;
   }

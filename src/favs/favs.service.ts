@@ -35,9 +35,9 @@ export class FavsService {
     };
   }
 
-  removeTrack(id: string) {
+  removeTrack(id: string, silent: boolean = false) {
     const index = favs.tracks.indexOf(id);
-    if (index === -1) {
+    if (index === -1 && !silent) {
       throw new NotFoundException(`Track id "${id}" is not in favorites`);
     }
     favs.tracks.splice(index, 1);
@@ -57,9 +57,9 @@ export class FavsService {
     };
   }
 
-  removeAlbum(id: string) {
+  removeAlbum(id: string, silent: boolean = false) {
     const index = favs.albums.indexOf(id);
-    if (index === -1) {
+    if (index === -1 && !silent) {
       throw new NotFoundException(`Album id "${id}" is not in favorites`);
     }
     favs.albums.splice(index, 1);
@@ -79,9 +79,9 @@ export class FavsService {
     };
   }
 
-  removeArtist(id: string) {
+  removeArtist(id: string, silent: boolean = false) {
     const index = favs.artists.indexOf(id);
-    if (index === -1) {
+    if (index === -1 && !silent) {
       throw new NotFoundException(`Artist id "${id}" is not in favorites`);
     }
     favs.artists.splice(index, 1);

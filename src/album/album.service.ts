@@ -53,7 +53,7 @@ export class AlbumService {
     if (!albums.has(id)) {
       throw new NotFoundException(`Album with id "${id}" not found`);
     }
-    this.favsService.removeAlbum(id);
+    this.favsService.removeAlbum(id, true);
     albums.delete(id);
     return true;
   }

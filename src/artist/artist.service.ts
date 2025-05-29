@@ -52,7 +52,8 @@ export class ArtistService {
     if (!artists.has(id)) {
       throw new NotFoundException('Artist not found');
     }
-    this.favsService.removeArtist(id);
+    this.favsService.removeArtist(id, true);
+
     artists.delete(id);
     return true;
   }
