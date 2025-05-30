@@ -9,12 +9,18 @@ import { UpdateArtistDto } from './dto/update-artist.dto';
 import { randomUUID } from 'node:crypto';
 import { artists } from 'src/db/db';
 import { FavsService } from 'src/favs/favs.service';
+import { AlbumService } from 'src/album/album.service';
+import { TrackService } from 'src/track/track.service';
 
 @Injectable()
 export class ArtistService {
   constructor(
     @Inject(forwardRef(() => FavsService))
     private readonly favsService: FavsService,
+    @Inject(forwardRef(() => AlbumService))
+    private readonly albumService: AlbumService,
+    @Inject(forwardRef(() => TrackService))
+    private readonly trackService: TrackService,
   ) {}
 
   create(createArtistDto: CreateArtistDto) {
@@ -22,16 +28,16 @@ export class ArtistService {
       id: randomUUID(),
       ...createArtistDto,
     };
-    artists.set(artist.id, artist);
+    artists.push(artist);
     return artist;
   }
 
   findAll() {
-    return Array.from(artists.values());
+    return artists;
   }
 
   findOne(id: string) {
-    const artist = artists.get(id);
+    const artist = artists.find((artist) => artist.id === id);
     if (!artist) {
       throw new NotFoundException('Artist not found');
     }
@@ -39,22 +45,24 @@ export class ArtistService {
   }
 
   update(id: string, updateArtistDto: UpdateArtistDto) {
-    const artist = artists.get(id);
-    if (!artist) {
+    const index = artists.findIndex((artist) => artist.id === id);
+    if (index === -1) {
       throw new NotFoundException('Artist not found');
     }
-    const updatedArtist = { ...artist, ...updateArtistDto };
-    artists.set(id, updatedArtist);
+    const updatedArtist = { ...artists[index], ...updateArtistDto };
+    artists[index] = updatedArtist;
     return updatedArtist;
   }
 
   remove(id: string) {
-    if (!artists.has(id)) {
+    const index = artists.findIndex((artist) => artist.id === id);
+    if (index === -1) {
       throw new NotFoundException('Artist not found');
     }
     this.favsService.removeArtist(id, true);
-
-    artists.delete(id);
+    this.albumService.setNullArtist(id);
+    this.trackService.setNullArtist(id);
+    artists.splice(index, 1);
     return true;
   }
 }

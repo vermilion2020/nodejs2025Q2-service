@@ -22,7 +22,7 @@ export class TrackService {
       id: randomUUID(),
       ...createTrackDto,
     };
-    tracks.set(track.id, track);
+    tracks.push(track);
     return track;
   }
 
@@ -31,30 +31,59 @@ export class TrackService {
   }
 
   findOne(id: string) {
-    if (!tracks.has(id)) {
+    const index = tracks.findIndex((track) => track.id === id);
+    if (index === -1) {
       throw new NotFoundException(`Track with id "${id}" not found`);
     }
-    return tracks.get(id);
+    return tracks[index];
+  }
+
+  setNullArtist(id: string) {
+    const ids = this.findAll()
+      .filter((track) => track.artistId === id)
+      .map((album) => album.id);
+    ids.forEach((id) => {
+      const track = tracks.find((track) => track.id === id);
+      if (track) {
+        track.artistId = null;
+        tracks.push(track);
+      }
+    });
+  }
+
+  setNullAlbum(id: string) {
+    const ids = this.findAll()
+      .filter((track) => track.albumId === id)
+      .map((album) => album.id);
+    ids.forEach((id) => {
+      const track = tracks.find((track) => track.id === id);
+      if (track) {
+        track.albumId = null;
+        tracks.push(track);
+      }
+    });
   }
 
   update(id: string, updateTrackDto: UpdateTrackDto) {
-    if (!tracks.has(id)) {
+    const index = tracks.findIndex((track) => track.id === id);
+    if (index === -1) {
       throw new NotFoundException(`Track with id "${id}" not found`);
     }
     const updatedTrack = {
-      ...tracks.get(id),
+      ...tracks[index],
       ...updateTrackDto,
     };
-    tracks.set(id, updatedTrack);
+    tracks[index] = updatedTrack;
     return updatedTrack;
   }
 
   remove(id: string) {
-    if (!tracks.has(id)) {
+    const index = tracks.findIndex((track) => track.id === id);
+    if (index === -1) {
       throw new NotFoundException(`Track with id "${id}" not found`);
     }
     this.favsService.removeTrack(id, true);
-    tracks.delete(id);
+    tracks.splice(index, 1);
     return true;
   }
 }

@@ -10,20 +10,15 @@ import { albums, artists, favs, tracks } from 'src/db/db';
 export class FavsService {
   findAll() {
     return {
-      artists: Array.from(artists.values()).filter((artist) =>
-        favs.artists.includes(artist.id),
-      ),
-      albums: Array.from(albums.values()).filter((album) =>
-        favs.albums.includes(album.id),
-      ),
-      tracks: Array.from(tracks.values()).filter((track) =>
-        favs.tracks.includes(track.id),
-      ),
+      artists: artists.filter((artist) => favs.artists.includes(artist.id)),
+      albums: albums.filter((album) => favs.albums.includes(album.id)),
+      tracks: tracks.filter((track) => favs.tracks.includes(track.id)),
     };
   }
 
   createTrack(id: string) {
-    if (!tracks.has(id)) {
+    const index = tracks.findIndex((track) => track.id === id);
+    if (index === -1) {
       throw new HttpException(
         `Track id "${id}" doesn't exist`,
         HttpStatus.UNPROCESSABLE_ENTITY,
@@ -45,7 +40,8 @@ export class FavsService {
   }
 
   createAlbum(id: string) {
-    if (!albums.has(id)) {
+    const index = albums.findIndex((album) => album.id === id);
+    if (index === -1) {
       throw new HttpException(
         `Album id "${id}" doesn't exist`,
         HttpStatus.UNPROCESSABLE_ENTITY,
@@ -67,7 +63,8 @@ export class FavsService {
   }
 
   createArtist(id: string) {
-    if (!artists.has(id)) {
+    const index = artists.findIndex((artist) => artist.id === id);
+    if (index === -1) {
       throw new HttpException(
         `Artist id "${id}" doesn't exist`,
         HttpStatus.UNPROCESSABLE_ENTITY,

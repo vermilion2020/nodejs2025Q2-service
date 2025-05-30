@@ -6,11 +6,11 @@ import { Favs } from 'src/favs/entities/favs.entity';
 
 export const users: Map<string, User> = new Map();
 
-export const artists: Map<string, Artist> = new Map();
+export const artists: Artist[] = [];
 
-export const albums: Map<string, Album> = new Map();
+export const albums: Album[] = [];
 
-export const tracks: Map<string, Track> = new Map();
+export const tracks: Track[] = [];
 
 export const favs: Favs = {
   artists: [],

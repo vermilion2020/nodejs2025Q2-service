@@ -7,5 +7,6 @@ import { FavsModule } from 'src/favs/favs.module';
   controllers: [TrackController],
   providers: [TrackService],
   imports: [FavsModule],
+  exports: [TrackService],
 })
 export class TrackModule {}

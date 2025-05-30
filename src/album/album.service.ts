@@ -9,12 +9,15 @@ import { UpdateAlbumDto } from './dto/update-album.dto';
 import { randomUUID } from 'node:crypto';
 import { albums } from '../db/db';
 import { FavsService } from 'src/favs/favs.service';
+import { TrackService } from 'src/track/track.service';
 
 @Injectable()
 export class AlbumService {
   constructor(
     @Inject(forwardRef(() => FavsService))
     private readonly favsService: FavsService,
+    @Inject(forwardRef(() => TrackService))
+    private readonly trackService: TrackService,
   ) {}
 
   create(createAlbumDto: CreateAlbumDto) {
@@ -22,39 +25,56 @@ export class AlbumService {
       id: randomUUID(),
       ...createAlbumDto,
     };
-    albums.set(album.id, album);
+    albums.push(album);
     return album;
   }
 
   findAll() {
-    return Array.from(albums.values());
+    return albums;
+  }
+
+  setNullArtist(id: string) {
+    const ids = this.findAll()
+      .filter((album) => album.artistId === id)
+      .map((album) => album.id);
+    ids.forEach((id) => {
+      const album = albums.find((album) => album.id === id);
+      if (album) {
+        album.artistId = null;
+        albums.push(album);
+      }
+    });
   }
 
   findOne(id: string) {
-    if (!albums.has(id)) {
+    const album = albums.find((album) => album.id === id);
+    if (!album) {
       throw new NotFoundException(`Album with id "${id}" not found`);
     }
-    return albums.get(id);
+    return album;
   }
 
   update(id: string, updateAlbumDto: UpdateAlbumDto) {
-    if (!albums.has(id)) {
+    const index = albums.findIndex((album) => album.id === id);
+    if (index === -1) {
       throw new NotFoundException(`Album with id "${id}" not found`);
     }
     const updatedAlbum = {
-      ...albums.get(id),
+      ...albums[index],
       ...updateAlbumDto,
     };
-    albums.set(id, updatedAlbum);
+    albums[index] = updatedAlbum;
     return updatedAlbum;
   }
 
   remove(id: string) {
-    if (!albums.has(id)) {
+    const index = albums.findIndex((album) => album.id === id);
+    if (index === -1) {
       throw new NotFoundException(`Album with id "${id}" not found`);
     }
     this.favsService.removeAlbum(id, true);
-    albums.delete(id);
+    this.trackService.setNullAlbum(id);
+    albums.splice(index, 1);
     return true;
   }
 }

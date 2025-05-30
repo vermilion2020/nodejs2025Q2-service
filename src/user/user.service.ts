@@ -35,7 +35,7 @@ export class UserService {
   findOne(id: string) {
     const user = users.get(id);
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException(`User with id "${id}" not found`);
     }
     return this.removePassword(user);
   }
@@ -43,7 +43,7 @@ export class UserService {
   update(id: string, updateUserDto: UpdateUserDto) {
     const user = users.get(id);
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException(`User with id "${id}" not found`);
     }
     if (updateUserDto.oldPassword !== user.password) {
       throw new ForbiddenException('Old password is incorrect');
@@ -59,7 +59,7 @@ export class UserService {
 
   remove(id: string) {
     if (!users.has(id)) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException(`User with id "${id}" not found`);
     }
     users.delete(id);
     return true;
