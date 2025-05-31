@@ -36,7 +36,7 @@ export class FavsService {
       throw new NotFoundException(`Track id "${id}" is not in favorites`);
     }
     favs.tracks.splice(index, 1);
-    return true;
+    return;
   }
 
   createAlbum(id: string) {
@@ -59,7 +59,7 @@ export class FavsService {
       throw new NotFoundException(`Album id "${id}" is not in favorites`);
     }
     favs.albums.splice(index, 1);
-    return true;
+    return;
   }
 
   createArtist(id: string) {
@@ -82,6 +82,6 @@ export class FavsService {
       throw new NotFoundException(`Artist id "${id}" is not in favorites`);
     }
     favs.artists.splice(index, 1);
-    return true;
+    return;
   }
 }
