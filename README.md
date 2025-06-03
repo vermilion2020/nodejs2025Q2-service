@@ -11,6 +11,14 @@
 git clone git@github.com:vermilion2020/nodejs2025Q2-service.git
 ```
 
+## Switching to develop branch
+
+```
+cd nodejs2025Q2-service
+
+git checkout -b develop origin/develop
+```
+
 ## Installing NPM modules
 
 ```
