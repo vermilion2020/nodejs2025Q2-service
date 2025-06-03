@@ -1,0 +1,23 @@
+services:
+  library:
+    container_name: library
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    restart: always
+    ports:
+      - ${PORT}:${PORT}
+    volumes:
+      - node_modules:/library/node_modules
+    networks:
+      - library-app
+
+volumes:
+  node_modules:
+
+networks:
+  library-app:
+    name: library-app
+    driver: bridge

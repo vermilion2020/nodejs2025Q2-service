@@ -1,0 +1,14 @@
+README.md
+
+Dockerfile
+.dockerignore
+docker-compose.yaml
+
+.git
+.gitignore
+.env.example
+
+dist
+node_modules
+test
+
