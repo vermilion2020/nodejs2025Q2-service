@@ -6,3 +6,8 @@ export class User {
   createdAt: number;
   updatedAt: number;
 }
+
+export type UserData = Pick<User, 'id' | 'login' | 'version'> & {
+  createdAt: Date;
+  updatedAt: Date;
+};
