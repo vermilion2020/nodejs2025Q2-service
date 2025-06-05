@@ -1,6 +1,3 @@
--- CreateEnum
-CREATE TYPE "EntityType" AS ENUM ('TRACK', 'ARTIST', 'ALBUM');
-
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
@@ -46,8 +43,9 @@ CREATE TABLE "Track" (
 -- CreateTable
 CREATE TABLE "Favorites" (
     "id" TEXT NOT NULL,
-    "entityId" TEXT NOT NULL,
-    "entityType" "EntityType" NOT NULL DEFAULT 'TRACK',
+    "artistId" TEXT,
+    "albumId" TEXT,
+    "trackId" TEXT,
 
     CONSTRAINT "Favorites_pkey" PRIMARY KEY ("id")
 );
@@ -60,3 +58,12 @@ ALTER TABLE "Track" ADD CONSTRAINT "Track_artistId_fkey" FOREIGN KEY ("artistId"
 
 -- AddForeignKey
 ALTER TABLE "Track" ADD CONSTRAINT "Track_albumId_fkey" FOREIGN KEY ("albumId") REFERENCES "Album"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Favorites" ADD CONSTRAINT "Favorites_artistId_fkey" FOREIGN KEY ("artistId") REFERENCES "Artist"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Favorites" ADD CONSTRAINT "Favorites_albumId_fkey" FOREIGN KEY ("albumId") REFERENCES "Album"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Favorites" ADD CONSTRAINT "Favorites_trackId_fkey" FOREIGN KEY ("trackId") REFERENCES "Track"("id") ON DELETE SET NULL ON UPDATE CASCADE;
