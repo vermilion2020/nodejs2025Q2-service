@@ -6,7 +6,6 @@ docker-compose.yaml
 
 .git
 .gitignore
-.env.example
 
 dist
 node_modules
