@@ -1,14 +1,17 @@
 import { BadRequestException } from '@nestjs/common';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 export enum ErrorMessages {
-  FOREIGN_KEY_CONSTRAINT_VIOLATED = 'Foreign key constraint violated on the (not available)',
+  FOREIGN_KEY_CONSTRAINT_VIOLATED = 'Foreign key constraint violated on one of the fields: ArtistId, AlbumId, TrackId',
 }
 
-export const parseError = (error: { message: string }) => {
-  if (error.message.includes(ErrorMessages.FOREIGN_KEY_CONSTRAINT_VIOLATED)) {
-    return new BadRequestException(
-      ErrorMessages.FOREIGN_KEY_CONSTRAINT_VIOLATED,
-    );
+export const parseError = (error: PrismaClientKnownRequestError) => {
+  switch (error.code) {
+    case 'P2002':
+      return new BadRequestException(
+        ErrorMessages.FOREIGN_KEY_CONSTRAINT_VIOLATED,
+      );
+    default:
+      return new BadRequestException(error.message);
   }
-  return new BadRequestException(error.message);
 };

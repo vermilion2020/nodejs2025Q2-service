@@ -59,29 +59,28 @@ export class TrackService {
   }
 
   async update(id: string, updateTrackDto: UpdateTrackDto) {
-    const track = await this.prisma.track.findUnique({
-      where: { id },
-    });
-    if (!track) {
-      throw new NotFoundException(`Track with id "${id}" not found`);
+    await this.findOne(id);
+    try {
+      const updatedTrack = await this.prisma.track.update({
+        where: { id },
+        data: updateTrackDto,
+      });
+      return updatedTrack;
+    } catch (error) {
+      throw parseError(error);
     }
-    const updatedTrack = await this.prisma.track.update({
-      where: { id },
-      data: updateTrackDto,
-    });
-    return updatedTrack;
   }
 
   async remove(id: string) {
-    const track = await this.prisma.track.findUnique({
-      where: { id },
-    });
-    if (!track) {
-      throw new NotFoundException(`Track with id "${id}" not found`);
+    await this.findOne(id);
+    try {
+      // this.favsService.removeTrack(id, true);
+      await this.prisma.track.delete({
+        where: { id },
+      });
+      return true;
+    } catch (error) {
+      throw parseError(error);
     }
-    await this.prisma.track.delete({
-      where: { id },
-    });
-    return true;
   }
 }
