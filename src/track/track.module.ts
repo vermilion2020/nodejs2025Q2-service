@@ -1,13 +1,10 @@
 import { Module } from '@nestjs/common';
 import { TrackService } from './track.service';
 import { TrackController } from './track.controller';
-import { FavsModule } from 'src/favs/favs.module';
-import { PrismaModule } from 'src/prisma/prisma.module';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Module({
   controllers: [TrackController],
-  providers: [TrackService],
-  imports: [FavsModule, PrismaModule],
-  exports: [TrackService],
+  providers: [TrackService, PrismaService],
 })
 export class TrackModule {}
