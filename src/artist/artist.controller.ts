@@ -55,7 +55,6 @@ export class ArtistController {
   @ApiOperation({ summary: 'Delete artist by id' })
   @HttpCode(StatusCodes.NO_CONTENT)
   remove(@Param('id', ParseUUIDPipe) id: string) {
-    this.artistService.remove(id);
-    return true;
+    return this.artistService.remove(id);
   }
 }

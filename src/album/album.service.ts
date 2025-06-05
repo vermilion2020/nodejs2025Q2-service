@@ -1,25 +1,12 @@
-import {
-  forwardRef,
-  Inject,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
-import { FavsService } from 'src/favs/favs.service';
-import { TrackService } from 'src/track/track.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { parseError } from 'src/utils/errors';
 
 @Injectable()
 export class AlbumService {
-  constructor(
-    @Inject(forwardRef(() => FavsService))
-    private readonly favsService: FavsService,
-    @Inject(forwardRef(() => TrackService))
-    private readonly trackService: TrackService,
-    private readonly prisma: PrismaService,
-  ) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async create(createAlbumDto: CreateAlbumDto) {
     try {
@@ -35,13 +22,6 @@ export class AlbumService {
   async findAll() {
     const albums = await this.prisma.album.findMany();
     return albums || [];
-  }
-
-  async setNullArtist(id: string) {
-    await this.prisma.album.updateMany({
-      where: { artistId: id },
-      data: { artistId: null },
-    });
   }
 
   async findOne(id: string) {
@@ -79,7 +59,6 @@ export class AlbumService {
     if (!album) {
       throw new NotFoundException(`Album with id "${id}" not found`);
     }
-    // this.favsService.removeAlbum(id, true);
     await this.prisma.album.delete({
       where: { id },
     });
