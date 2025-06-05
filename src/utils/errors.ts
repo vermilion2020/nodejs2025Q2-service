@@ -6,8 +6,9 @@ export enum ErrorMessages {
 }
 
 export const parseError = (error: PrismaClientKnownRequestError) => {
+  console.log(error);
   switch (error.code) {
-    case 'P2002':
+    case 'P2003':
       return new BadRequestException(
         ErrorMessages.FOREIGN_KEY_CONSTRAINT_VIOLATED,
       );
