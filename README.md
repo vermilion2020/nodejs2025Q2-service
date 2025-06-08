@@ -9,7 +9,13 @@
 ## Downloading
 
 ```
-git clone git@github.com:vermilion2020/nodejs2025Q2-service.git
+git clone -b containerization-database-orm git@github.com:vermilion2020/nodejs2025Q2-service.git
+```
+
+## Change directory
+
+```
+cd nodejs2025Q2-service
 ```
 
 ## Installing NPM modules
@@ -24,11 +30,17 @@ npm install
 cp .env.example .env
 ```
 
-## Running application
+## Running application in docker
+
+## Run containers
 
 ```
-npm start
+npm run docker:start
 ```
+
+## Application launching
+
+Wait until the app is loaded. After all resources are mapped there would be a message `Nest application successfully started`.
 
 After starting the app on port (4000 as default) you can open
 in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
@@ -50,14 +62,16 @@ To run only one of all test suites
 npm run test -- <path to suite>
 ```
 
-### Auto-fix and format
+## Security scanning
 
 ```
-npm run lint
+npm run docker:security-scan
 ```
 
+## Docker images listing
+
 ```
-npm run format
+npm run docker:list-images
 ```
 
 # Application Resources
