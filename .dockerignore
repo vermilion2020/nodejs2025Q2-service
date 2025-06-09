@@ -1,6 +1,7 @@
 README.md
 
 Dockerfile
+postgres/Dockerfile
 .dockerignore
 docker-compose.yaml
 

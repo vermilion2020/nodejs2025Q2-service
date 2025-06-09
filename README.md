@@ -32,15 +32,13 @@ cp .env.example .env
 
 ## Running application in docker
 
-## Run containers
-
 ```
 npm run docker:start
 ```
 
 ## Application launching
 
-Wait until the app is loaded. After all resources are mapped there would be a message `Nest application successfully started`.
+Wait until the app is loaded. After all resources are mapped, the application will send log `Nest application successfully started` in the console.
 
 After starting the app on port (4000 as default) you can open
 in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
@@ -117,61 +115,3 @@ npm run docker:list-images
 - **DELETE /favs/album/:id**: Remove an album from favorites.
 - **POST /favs/artist/:id**: Add an artist to favorites.
 - **DELETE /favs/artist/:id**: Remove an artist from favorites.
-
-## Entities
-
-### User
-
-```typescript
-interface User {
-  id: string;
-  login: string;
-  password: string;
-  version: number;
-  createdAt: number;
-  updatedAt: number;
-}
-```
-
-### Artist
-
-```typescript
-interface Artist {
-  id: string;
-  name: string;
-  grammy: boolean;
-}
-```
-
-### Track
-
-```typescript
-interface Track {
-  id: string;
-  name: string;
-  artistId: string | null;
-  albumId: string | null;
-  duration: number;
-}
-```
-
-### Album
-
-```typescript
-interface Album {
-  id: string;
-  name: string;
-  year: number;
-  artistId: string | null;
-}
-```
-
-### Favorites
-
-```typescript
-interface Favorites {
-  artists: string[];
-  albums: string[];
-  tracks: string[];
-}
-```

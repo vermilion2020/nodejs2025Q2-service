@@ -8,7 +8,7 @@ services:
       - .env
     restart: on-failure
     ports:
-      - '${PG_PORT}:${PG_PORT}'
+      - '${POSTGRES_PORT}:${POSTGRES_PORT}'
     volumes:
       - postgresql:/var/lib/postgresql/data
       - postgresql-logs:/var/log/postgresql
@@ -27,7 +27,7 @@ services:
       - ${PORT}:${PORT}
     develop:
       watch:
-        - action: sync
+        - action: sync+restart
           path: ./src
           target: /usr/app/src
     volumes:
