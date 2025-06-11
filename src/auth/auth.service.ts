@@ -32,8 +32,9 @@ export class AuthService {
 
   async signup(createUserDto: CreateUserDto) {
     try {
-      await this.userService.create(createUserDto);
+      const user = await this.userService.create(createUserDto);
       return {
+        id: user.id,
         message: 'User is created.',
       };
     } catch (error) {
@@ -46,18 +47,21 @@ export class AuthService {
     const { login, password } = createUserDto;
     const user = await this.userService.findLogin(login);
     if (!user) {
-      throw new UnauthorizedException(errorMessage);
+      throw new ForbiddenException(errorMessage);
     }
 
     const checkPassword = await bcrypt.compare(password, user.password);
     if (!checkPassword) {
-      throw new UnauthorizedException(errorMessage);
+      throw new ForbiddenException(errorMessage);
     }
 
     return this.createTokens({ userId: user.id, login });
   }
 
   async refresh(refreshDto: RefreshDto) {
+    if (!refreshDto.refreshToken) {
+      throw new UnauthorizedException('Refresh token is not provided');
+    }
     try {
       const { userId, login } = await this.jwtService.verifyAsync(
         refreshDto.refreshToken,
@@ -67,7 +71,7 @@ export class AuthService {
       );
       return this.createTokens({ userId, login });
     } catch (error) {
-      throw new ForbiddenException(error.message);
+      throw new ForbiddenException('Refresh token is invalid or expired');
     }
   }
 }
