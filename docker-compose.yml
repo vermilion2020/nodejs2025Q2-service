@@ -29,7 +29,7 @@ services:
       watch:
         - action: sync+restart
           path: ./src
-          target: /usr/app/src
+          target: /usr/library/src
     volumes:
       - node_modules:/library/node_modules
     networks:

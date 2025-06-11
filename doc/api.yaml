@@ -10,6 +10,56 @@ paths:
       summary: Get home page
       tags:
         - App
+  /auth/signup:
+    post:
+      operationId: AuthController_signup
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserDto'
+      responses:
+        '201':
+          description: ''
+      summary: User sign up
+      tags:
+        - Auth
+  /auth/login:
+    post:
+      operationId: AuthController_login
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserDto'
+      responses:
+        '202':
+          description: ''
+      summary: User login
+      tags:
+        - Auth
+  /auth/refresh:
+    post:
+      operationId: AuthController_refresh
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshDto'
+      responses:
+        '202':
+          description: ''
+      security:
+        - bearer: []
+      summary: Refresh token
+      tags:
+        - Auth
   /user:
     post:
       operationId: UserController_create
@@ -23,6 +73,8 @@ paths:
       responses:
         '201':
           description: ''
+      security:
+        - bearer: []
       summary: Create user
       tags:
         - Users
@@ -32,6 +84,8 @@ paths:
       responses:
         '200':
           description: ''
+      security:
+        - bearer: []
       summary: Get all users
       tags:
         - Users
@@ -47,6 +101,8 @@ paths:
       responses:
         '200':
           description: ''
+      security:
+        - bearer: []
       summary: Get user by id
       tags:
         - Users
@@ -67,6 +123,8 @@ paths:
       responses:
         '200':
           description: ''
+      security:
+        - bearer: []
       summary: Change user password by id
       tags:
         - Users
@@ -81,6 +139,8 @@ paths:
       responses:
         '204':
           description: ''
+      security:
+        - bearer: []
       summary: Delete user by id
       tags:
         - Users
@@ -97,6 +157,8 @@ paths:
       responses:
         '201':
           description: ''
+      security:
+        - bearer: []
       summary: Create artist
       tags:
         - Artists
@@ -106,6 +168,8 @@ paths:
       responses:
         '200':
           description: ''
+      security:
+        - bearer: []
       summary: Get all artists
       tags:
         - Artists
@@ -121,6 +185,8 @@ paths:
       responses:
         '200':
           description: ''
+      security:
+        - bearer: []
       summary: Get artist by id
       tags:
         - Artists
@@ -141,6 +207,8 @@ paths:
       responses:
         '200':
           description: ''
+      security:
+        - bearer: []
       summary: Update artist by id
       tags:
         - Artists
@@ -155,106 +223,11 @@ paths:
       responses:
         '204':
           description: ''
+      security:
+        - bearer: []
       summary: Delete artist by id
       tags:
         - Artists
-  /favs:
-    get:
-      operationId: FavsController_findAll
-      parameters: []
-      responses:
-        '200':
-          description: ''
-      summary: Get all favorites
-      tags:
-        - Favorites
-  /favs/track/{id}:
-    post:
-      operationId: FavsController_createTrack
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        '201':
-          description: ''
-      summary: Create track in favorites
-      tags:
-        - Favorites
-    delete:
-      operationId: FavsController_removeTrack
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        '204':
-          description: ''
-      summary: Remove track from favorites
-      tags:
-        - Favorites
-  /favs/album/{id}:
-    post:
-      operationId: FavsController_createAlbum
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        '201':
-          description: ''
-      summary: Create album in favorites
-      tags:
-        - Favorites
-    delete:
-      operationId: FavsController_removeAlbum
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        '204':
-          description: ''
-      summary: Remove album from favorites
-      tags:
-        - Favorites
-  /favs/artist/{id}:
-    post:
-      operationId: FavsController_createArtist
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        '201':
-          description: ''
-      summary: Create artist in favorites
-      tags:
-        - Favorites
-    delete:
-      operationId: FavsController_removeArtist
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        '204':
-          description: ''
-      summary: Remove artist from favorites
-      tags:
-        - Favorites
   /album:
     post:
       operationId: AlbumController_create
@@ -268,6 +241,8 @@ paths:
       responses:
         '201':
           description: ''
+      security:
+        - bearer: []
       summary: Create album
       tags:
         - Albums
@@ -277,6 +252,8 @@ paths:
       responses:
         '200':
           description: ''
+      security:
+        - bearer: []
       summary: Get all albums
       tags:
         - Albums
@@ -292,6 +269,8 @@ paths:
       responses:
         '200':
           description: ''
+      security:
+        - bearer: []
       summary: Get album by id
       tags:
         - Albums
@@ -312,6 +291,8 @@ paths:
       responses:
         '200':
           description: ''
+      security:
+        - bearer: []
       summary: Update album by id
       tags:
         - Albums
@@ -326,6 +307,8 @@ paths:
       responses:
         '204':
           description: ''
+      security:
+        - bearer: []
       summary: Delete album by id
       tags:
         - Albums
@@ -342,6 +325,8 @@ paths:
       responses:
         '201':
           description: ''
+      security:
+        - bearer: []
       summary: Create track
       tags:
         - Tracks
@@ -351,6 +336,8 @@ paths:
       responses:
         '200':
           description: ''
+      security:
+        - bearer: []
       summary: Get all tracks
       tags:
         - Tracks
@@ -366,6 +353,8 @@ paths:
       responses:
         '200':
           description: ''
+      security:
+        - bearer: []
       summary: Get track by id
       tags:
         - Tracks
@@ -386,6 +375,8 @@ paths:
       responses:
         '200':
           description: ''
+      security:
+        - bearer: []
       summary: Update track by id
       tags:
         - Tracks
@@ -400,9 +391,122 @@ paths:
       responses:
         '204':
           description: ''
+      security:
+        - bearer: []
       summary: Delete track by id
       tags:
         - Tracks
+  /favs:
+    get:
+      operationId: FavsController_findAll
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      security:
+        - bearer: []
+      summary: Get all favorites
+      tags:
+        - Favorites
+  /favs/track/{id}:
+    post:
+      operationId: FavsController_createTrack
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '201':
+          description: ''
+      security:
+        - bearer: []
+      summary: Create track in favorites
+      tags:
+        - Favorites
+    delete:
+      operationId: FavsController_removeTrack
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '204':
+          description: ''
+      security:
+        - bearer: []
+      summary: Remove track from favorites
+      tags:
+        - Favorites
+  /favs/album/{id}:
+    post:
+      operationId: FavsController_createAlbum
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '201':
+          description: ''
+      security:
+        - bearer: []
+      summary: Create album in favorites
+      tags:
+        - Favorites
+    delete:
+      operationId: FavsController_removeAlbum
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '204':
+          description: ''
+      security:
+        - bearer: []
+      summary: Remove album from favorites
+      tags:
+        - Favorites
+  /favs/artist/{id}:
+    post:
+      operationId: FavsController_createArtist
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '201':
+          description: ''
+      security:
+        - bearer: []
+      summary: Create artist in favorites
+      tags:
+        - Favorites
+    delete:
+      operationId: FavsController_removeArtist
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '204':
+          description: ''
+      security:
+        - bearer: []
+      summary: Remove artist from favorites
+      tags:
+        - Favorites
 info:
   title: Home Library Service
   description: Home Library Service description
@@ -413,8 +517,16 @@ tags:
     description: ''
 servers: []
 components:
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
   schemas:
     CreateUserDto:
+      type: object
+      properties: {}
+    RefreshDto:
       type: object
       properties: {}
     UpdateUserDto:

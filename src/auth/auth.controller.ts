@@ -29,15 +29,16 @@ export class AuthController {
   @UsePipes(new ValidationPipe())
   @Post('login')
   @Public()
-  @HttpCode(StatusCodes.ACCEPTED)
+  @HttpCode(StatusCodes.OK)
   @ApiOperation({ summary: 'User login' })
   login(@Body() createUserDto: CreateUserDto) {
     return this.authService.login(createUserDto);
   }
 
   @Post('refresh')
-  @HttpCode(StatusCodes.ACCEPTED)
+  @HttpCode(StatusCodes.OK)
   @ApiOperation({ summary: 'Refresh token' })
+  @Public()
   @ApiBearerAuth()
   refresh(@Body() refreshDto: RefreshDto) {
     return this.authService.refresh(refreshDto);

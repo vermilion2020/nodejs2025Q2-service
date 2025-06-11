@@ -69,15 +69,23 @@ export class UserService {
     if (!user) {
       throw new NotFoundException(`User with id "${id}" not found`);
     }
-    if (updateUserDto.oldPassword !== user.password) {
+    const oldPasswordCorrect = await bcrypt.compare(
+      updateUserDto.oldPassword,
+      user.password,
+    );
+    if (!oldPasswordCorrect) {
       throw new ForbiddenException('Old password is incorrect');
     }
+    const cryptedNewPassword = await bcrypt.hash(
+      updateUserDto.newPassword,
+      CRYPT_SALT,
+    );
     const updatedUser = await this.prisma.user.update({
       where: { id },
       data: {
         version: user.version + 1,
         updatedAt: new Date(),
-        password: updateUserDto.newPassword,
+        password: cryptedNewPassword,
       },
     });
     return this.removePassword(updatedUser);

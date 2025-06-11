@@ -11,6 +11,11 @@ async function bootstrap() {
     .setDescription('Home Library Service description')
     .setVersion('1.0')
     .addTag('home-library')
+    .addBearerAuth({
+      type: 'http',
+      scheme: 'bearer',
+      bearerFormat: 'JWT',
+    })
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('doc', app, documentFactory, {

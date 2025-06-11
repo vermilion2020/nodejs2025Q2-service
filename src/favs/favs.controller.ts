@@ -9,10 +9,11 @@ import {
 } from '@nestjs/common';
 import { FavsService } from './favs.service';
 import { StatusCodes } from 'http-status-codes';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @Controller('favs')
 @ApiTags('Favorites')
+@ApiBearerAuth()
 export class FavsController {
   constructor(private readonly favsService: FavsService) {}
 
