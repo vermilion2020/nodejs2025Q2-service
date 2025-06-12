@@ -37,7 +37,7 @@ paths:
             schema:
               $ref: '#/components/schemas/CreateUserDto'
       responses:
-        '202':
+        '200':
           description: ''
       summary: User login
       tags:
@@ -53,7 +53,7 @@ paths:
             schema:
               $ref: '#/components/schemas/RefreshDto'
       responses:
-        '202':
+        '200':
           description: ''
       security:
         - bearer: []
