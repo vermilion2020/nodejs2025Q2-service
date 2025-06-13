@@ -1,8 +1,11 @@
-import { NestFactory } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DEFAULT_PORT } from './utils/defaults';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import 'dotenv/config';
+import { CustomExceptionFilter } from './logging/exception-filter/exception.filter';
+import { LoggingService } from './logging/logging.service';
+import { ErrorsInterceptor } from './logging/exception-filter/error.intercepter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -17,10 +20,23 @@ async function bootstrap() {
       bearerFormat: 'JWT',
     })
     .build();
+
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('doc', app, documentFactory, {
     yamlDocumentUrl: 'swagger/yaml',
   });
+
+  const loggingService = new LoggingService();
+
+  app.useGlobalInterceptors(new ErrorsInterceptor(loggingService));
+
+  const httpAdapterHost = app.get(HttpAdapterHost);
+
+  app.useGlobalFilters(
+    new CustomExceptionFilter(httpAdapterHost, loggingService),
+  );
+
   await app.listen(process.env.PORT || DEFAULT_PORT);
 }
+
 bootstrap();

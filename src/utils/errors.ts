@@ -6,7 +6,6 @@ export enum ErrorMessages {
 }
 
 export const parseError = (error: PrismaClientKnownRequestError) => {
-  console.log(error);
   switch (error.code) {
     case 'P2003':
       return new BadRequestException(
