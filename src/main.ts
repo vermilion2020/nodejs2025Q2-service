@@ -5,7 +5,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import 'dotenv/config';
 import { CustomExceptionFilter } from './logging/exception-filter/exception.filter';
 import { LoggingService } from './logging/logging.service';
-import { ErrorsInterceptor } from './logging/exception-filter/error.intercepter';
+import { ErrorsInterceptor } from './logging/exception-filter/error.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -27,6 +27,7 @@ async function bootstrap() {
   });
 
   const loggingService = new LoggingService();
+  await loggingService.setup();
 
   app.useGlobalInterceptors(new ErrorsInterceptor(loggingService));
 

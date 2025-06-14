@@ -1,5 +1,7 @@
 import {
   ForbiddenException,
+  HttpException,
+  HttpStatus,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -27,6 +29,15 @@ export class UserService {
   }
 
   async create(createUserDto: CreateUserDto) {
+    const existingUser = await this.prisma.user.findFirst({
+      where: { login: createUserDto.login },
+    });
+    if (existingUser) {
+      throw new HttpException(
+        'User with this login already exists',
+        HttpStatus.CONFLICT,
+      );
+    }
     const cryptedPassword = await bcrypt.hash(
       createUserDto.password,
       CRYPT_SALT,

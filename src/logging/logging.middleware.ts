@@ -1,8 +1,15 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
+import { LoggingService } from './logging.service';
 
 @Injectable()
 export class LoggingMiddleware implements NestMiddleware {
+  private loggingService: LoggingService;
+  constructor() {
+    this.loggingService = new LoggingService();
+    this.loggingService.setup();
+  }
+
   getResponseData(res: Response) {
     const rawResponse = res.write;
     const rawResponseEnd = res.end;
@@ -31,15 +38,17 @@ export class LoggingMiddleware implements NestMiddleware {
       }
       const body = Buffer.concat(chunkBuffers).toString('utf8');
       try {
-        const responseData = {
-          statusCode: res.statusCode,
-          body: JSON.parse(body) || body || {},
-        };
-        console.log('Response:');
-        console.log(`Status code: ${responseData.statusCode}`);
-        console.log(`Body: ${JSON.stringify(responseData.body)}`);
+        const message = `Response: Status Code: ${res.statusCode} Body: ${JSON.stringify(JSON.parse(body))}`;
+
+        if (res.statusCode >= 500) {
+          this.loggingService.error(message);
+        } else if (res.statusCode >= 400 && res.statusCode < 500) {
+          this.loggingService.warn(message);
+        } else {
+          this.loggingService.log(message);
+        }
       } catch (error) {
-        console.log('Body is not a valid JSON');
+        this.loggingService.log(`Response: Status Code: ${res.statusCode}`);
       }
       return rawResponseEnd.apply(res, resArgs);
     };
@@ -47,9 +56,10 @@ export class LoggingMiddleware implements NestMiddleware {
 
   async use(req: Request, res: Response, next: NextFunction) {
     this.getResponseData(res);
-    console.log(`Request: ${req.method} ${req.url}`);
-    console.log(`Body: ${JSON.stringify(req.body)}`);
-    console.log(`Params: ${JSON.stringify(req.params)}`);
+
+    this.loggingService.log(
+      `Request: ${req.method} ${req.url} Body: ${JSON.stringify(req.body)} Params: ${JSON.stringify(req.params)}`,
+    );
     next();
   }
 }

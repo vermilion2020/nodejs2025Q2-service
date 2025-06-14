@@ -19,7 +19,7 @@ export class ErrorsInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
       catchError((err) => {
-        this.loggingService.error(`Uncaught Exception: ${err}`);
+        this.loggingService.error(`Uncaught Exception: ${err.message}`);
         return throwError(() => err);
       }),
     );

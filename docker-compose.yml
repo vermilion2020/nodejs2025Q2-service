@@ -27,9 +27,9 @@ services:
       - ${PORT}:${PORT}
     develop:
       watch:
-        - action: sync+restart
+        - action: sync
           path: ./src
-          target: /usr/library/src
+          target: /library/src
     volumes:
       - node_modules:/library/node_modules
     networks:
