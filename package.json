@@ -27,7 +27,8 @@
     "docker:start": "docker-compose up --watch",
     "docker:stop": "docker-compose down",
     "docker:security-scan": "docker scout cves verm1shelka/nodejs2025q2-service-library:latest",
-    "docker:list-images": "docker images"
+    "docker:list-images": "docker images",
+    "db:setup": "npx prisma migrate deploy && npx prisma generate"
   },
   "dependencies": {
     "@nestjs/common": "^10.4.16",

@@ -3,6 +3,7 @@ import {
   NestInterceptor,
   ExecutionContext,
   CallHandler,
+  HttpException,
 } from '@nestjs/common';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -12,14 +13,18 @@ import { LoggingService } from '../logging.service';
 export class ErrorsInterceptor implements NestInterceptor {
   constructor(private readonly loggingService: LoggingService) {
     process.on('unhandledRejection', async (err) => {
-      this.loggingService.error(`Unhandled Rejection. ${err}`);
+      const errorMessage =
+        err instanceof Error ? err.stack || err : JSON.stringify(err);
+      this.loggingService.error(`Unhandled Rejection: ${errorMessage}`);
     });
   }
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
       catchError((err) => {
-        this.loggingService.error(`Uncaught Exception: ${err.message}`);
+        if (!(err instanceof HttpException)) {
+          this.loggingService.error(`Uncaught Exception: ${err.stack || err}`);
+        }
         return throwError(() => err);
       }),
     );

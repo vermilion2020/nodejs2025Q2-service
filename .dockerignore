@@ -4,6 +4,7 @@ Dockerfile
 postgres/Dockerfile
 .dockerignore
 docker-compose.yaml
+logs/
 
 .git
 .gitignore

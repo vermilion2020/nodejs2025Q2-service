@@ -17,7 +17,7 @@ export class LoggingService implements LoggerService {
 
   async setup() {
     await this.createLogFolder();
-    this.currentIndexes = await this.getNextLogFileIndexes();
+    this.currentIndexes = await this.getCurrentLogFileIndexes();
     this.maxFileSize =
       (+process.env.MAX_LOG_FILE_SIZE || DEFAULT_LOGS_MAX_FILE_SIZE) * 1024;
     this.currentLogLevel =
@@ -51,18 +51,22 @@ export class LoggingService implements LoggerService {
       `${type}_${this.currentIndexes[type]}.txt`,
     );
     const logTime = new Date().toISOString();
-    const newLine = `[${LogLevel[level]}] ${logTime} ${message}\n`;
-    await appendFile(logFilePath, newLine, { flag: 'a' });
+    const newLine = `[${LogLevel[level]}] ${logTime} ${message}\r\n`;
+    await appendFile(logFilePath, newLine);
   }
 
   async createLogFolder() {
-    const logFolderPath = join(LOGS_FOLDER);
     try {
-      await mkdir(logFolderPath);
-    } catch (error) {}
+      const stats = await stat(LOGS_FOLDER);
+      if (stats.isDirectory()) {
+        return;
+      }
+    } catch (error) {
+      await mkdir(LOGS_FOLDER);
+    }
   }
 
-  async getNextLogFileIndexes() {
+  async getCurrentLogFileIndexes() {
     const logFolderPath = join(LOGS_FOLDER);
     const logFiles = await readdir(logFolderPath);
     const { log, error } = logFiles

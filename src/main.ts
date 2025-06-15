@@ -33,9 +33,7 @@ async function bootstrap() {
 
   const httpAdapterHost = app.get(HttpAdapterHost);
 
-  app.useGlobalFilters(
-    new CustomExceptionFilter(httpAdapterHost, loggingService),
-  );
+  app.useGlobalFilters(new CustomExceptionFilter(httpAdapterHost));
 
   await app.listen(process.env.PORT || DEFAULT_PORT);
 }

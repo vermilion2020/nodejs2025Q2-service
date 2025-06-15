@@ -6,9 +6,9 @@ export enum LogType {
 }
 
 export enum LogLevel {
-  LOG = 0,
-  ERROR = 1,
-  WARN = 2,
+  ERROR = 0,
+  WARN = 1,
+  LOG = 2,
   DEBUG = 3,
   VERBOSE = 4,
 }

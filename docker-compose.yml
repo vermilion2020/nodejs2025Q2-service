@@ -32,6 +32,7 @@ services:
           target: /library/src
     volumes:
       - node_modules:/library/node_modules
+      - app_logs:/library/logs
     networks:
       - library-app
     depends_on:
@@ -41,6 +42,7 @@ volumes:
   node_modules:
   postgresql:
   postgresql-logs:
+  app_logs:
 
 networks:
   library-app:
