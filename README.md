@@ -85,6 +85,12 @@ To run all tests with authorization
 npm run test:auth
 ```
 
+To run refresh tests
+
+```
+npm run test:refresh
+```
+
 # Logging
 
 Logs are created by default in folder `logs`<br>
