@@ -1,0 +1,15 @@
+README.md
+
+Dockerfile
+postgres/Dockerfile
+.dockerignore
+docker-compose.yaml
+logs/
+
+.git
+.gitignore
+
+dist
+node_modules
+test
+
